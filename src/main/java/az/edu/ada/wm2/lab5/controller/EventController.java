@@ -98,4 +98,61 @@ public class EventController {
         }
     }
 
+    @GetMapping("/filter/date")
+    public ResponseEntity<List<Event>> getEventsByDateRange(
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+        try {
+            List<Event> events = eventService.getEventsByDateRange(start, end);
+            return new ResponseEntity<>(events, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/filter/price")
+    public ResponseEntity<List<Event>> getEventsByPriceRange(
+            @RequestParam("min") BigDecimal min,
+            @RequestParam("max") BigDecimal max) {
+        try {
+            List<Event> events = eventService.getEventsByPriceRange(min, max);
+            return new ResponseEntity<>(events, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/filter/tag")
+    public ResponseEntity<List<Event>> getEventsByTag(@RequestParam("tag") String tag) {
+        try {
+            List<Event> events = eventService.getEventsByTag(tag);
+            return new ResponseEntity<>(events, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<Event>> getUpcomingEvents() {
+        try {
+            List<Event> events = eventService.getUpcomingEvents();
+            return new ResponseEntity<>(events, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PatchMapping("/{id}/price")
+    public ResponseEntity<Event> updateEventPrice(
+            @PathVariable UUID id,
+            @RequestParam("price") BigDecimal price) {
+        try {
+            Event updatedEvent = eventService.updateEventPrice(id, price);
+            return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

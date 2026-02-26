@@ -85,27 +85,30 @@ public class EventServiceImpl implements EventService {
     // Custom methods
     @Override
     public List<Event> getEventsByTag(String tag) {
-        return List.of();
+        return eventRepository.findByTagsContaining(tag);
     }
 
     @Override
     public List<Event> getUpcomingEvents() {
-        return List.of();
+        return eventRepository.findAllByEventDateTimeAfter(LocalDateTime.now());
     }
 
     @Override
     public List<Event> getEventsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
-       return List.of();
+       return eventRepository.findAllByTicketPriceBetween(minPrice, maxPrice);
     }
 
     @Override
     public List<Event> getEventsByDateRange(LocalDateTime start, LocalDateTime end) {
-        return List.of();
+        return eventRepository.findAllByEventDateTimeBetween(start, end);
     }
 
     @Override
     public Event updateEventPrice(UUID id, BigDecimal newPrice) {
-        return null;
+        Event existingEvent = eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+        existingEvent.setTicketPrice(newPrice);
+        return eventRepository.save(existingEvent);
+
     }
 
 }
