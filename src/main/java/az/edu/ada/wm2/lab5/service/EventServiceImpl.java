@@ -85,12 +85,11 @@ public class EventServiceImpl implements EventService {
     // Custom methods
     @Override
     public List<Event> getEventsByTag(String tag) {
-        return List.of();
+        return eventRepository.findByTagsContaining(tag);
     }
 
     @Override
     public List<Event> getUpcomingEvents() {
-        return List.of();
     }
 
     @Override

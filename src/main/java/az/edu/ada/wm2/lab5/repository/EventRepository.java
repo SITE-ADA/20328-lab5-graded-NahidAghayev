@@ -12,4 +12,5 @@ public interface EventRepository {
     List<Event> findAll();
     void deleteById(UUID id);
     boolean existsById(UUID id);
+    List<Event> findByTagsContaining(String tag);
 }

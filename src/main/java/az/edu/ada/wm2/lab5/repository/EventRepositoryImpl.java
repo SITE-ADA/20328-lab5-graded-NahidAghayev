@@ -35,4 +35,15 @@ public class EventRepositoryImpl implements EventRepository {
     public boolean existsById(UUID id) {
         return eventStore.containsKey(id);
     }
+
+    @Override
+    public List<Event> findByTagsContaining(String tag) {
+        List<Event> matchingEvents = new Arrayist<>();
+        for (Event event : eventStore.values()) {
+            if (event.getTags() != null && event.getTags().contains(tag)) {
+                matchingEvents.add(event);
+            }
+        }
+        return matchingEvents;
+    }
 }
