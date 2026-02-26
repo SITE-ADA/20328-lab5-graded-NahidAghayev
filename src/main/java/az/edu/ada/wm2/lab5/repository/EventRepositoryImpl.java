@@ -2,6 +2,7 @@ package az.edu.ada.wm2.lab5.repository;
 
 import az.edu.ada.wm2.lab5.model.Event;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class EventRepositoryImpl implements EventRepository {
@@ -45,5 +46,16 @@ public class EventRepositoryImpl implements EventRepository {
             }
         }
         return matchingEvents;
+    }
+
+    @Override
+    public List<Event> findAllByEventDateTimeAfter(LocalDateTime dateTime) {
+        List<Event> upcomingEvents = new ArrayList<>();
+        for (Event event : eventStore.values()) {
+            if (event.getEventDateTime() != null && event.getEventDateTime().isAfter(dateTime)) {
+                upcomingEvents.add(event);
+            }
+        }
+        return upcomingEvents;
     }
 }

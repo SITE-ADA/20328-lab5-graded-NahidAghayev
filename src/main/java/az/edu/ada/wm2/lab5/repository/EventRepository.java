@@ -2,6 +2,7 @@ package az.edu.ada.wm2.lab5.repository;
 
 import az.edu.ada.wm2.lab5.model.Event;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,4 +14,5 @@ public interface EventRepository {
     void deleteById(UUID id);
     boolean existsById(UUID id);
     List<Event> findByTagsContaining(String tag);
+    List<Event> findAllByEventDateTimeAfter(LocalDateTime dateTime);
 }
