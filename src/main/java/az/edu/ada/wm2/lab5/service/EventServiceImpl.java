@@ -103,18 +103,12 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findAllByEventDateTimeBetween(start, end);
     }
 
-        @Override
+    @Override
+    public Event updateEventPrice(UUID id, BigDecimal newPrice) {
+        Event existingEvent = eventRepository.findById(id).orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+        existingEvent.setTicketPrice(newPrice);
+        return eventRepository.save(existingEvent);
 
-        public Event updateEventPrice(UUID id, BigDecimal newPrice) {
-
-            Event existingEvent = eventRepository.findById(id)
-
-                    .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
-
-            existingEvent.setTicketPrice(newPrice);
-
-            return eventRepository.save(existingEvent);
-
-        }
+    }
 
 }
