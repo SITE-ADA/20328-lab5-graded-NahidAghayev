@@ -2,6 +2,7 @@ package az.edu.ada.wm2.lab5.repository;
 
 import az.edu.ada.wm2.lab5.model.Event;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -39,7 +40,7 @@ public class EventRepositoryImpl implements EventRepository {
 
     @Override
     public List<Event> findByTagsContaining(String tag) {
-        List<Event> matchingEvents = new Arrayist<>();
+        List<Event> matchingEvents = new ArrayList<>();
         for (Event event : eventStore.values()) {
             if (event.getTags() != null && event.getTags().contains(tag)) {
                 matchingEvents.add(event);
@@ -57,5 +58,31 @@ public class EventRepositoryImpl implements EventRepository {
             }
         }
         return upcomingEvents;
+    }
+
+    @Override
+    public List<Event> findAllByTicketPriceBetween(BigDecimal minPrice, BigDecimal maxPrice) {
+        List<Event> eventsInPriceRange = new ArrayList<>();
+        for (Event event : eventStore.values()) {
+            if (event.getTicketPrice() != null &&
+                event.getTicketPrice().compareTo(minPrice) >= 0 &&
+                event.getTicketPrice().compareTo(maxPrice) <= 0) {
+                eventsInPriceRange.add(event);
+            }
+        }
+        return eventsInPriceRange;
+    }
+
+    @Override
+    public List<Event> findAllByEventDateTimeBetween(LocalDateTime start, LocalDateTime end) {
+        List<Event> eventsInDateRange = new ArrayList<>();
+        for (Event event : eventStore.values()) {
+            if (event.getEventDateTime() != null &&
+                (event.getEventDateTime().isEqual(start) || event.getEventDateTime().isAfter(start)) &&
+                (event.getEventDateTime().isEqual(end) || event.getEventDateTime().isBefore(end))) {
+                eventsInDateRange.add(event);
+            }
+        }
+        return eventsInDateRange;
     }
 }

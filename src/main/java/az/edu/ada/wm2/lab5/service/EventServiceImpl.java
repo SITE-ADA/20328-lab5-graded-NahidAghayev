@@ -90,24 +90,31 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getUpcomingEvents() {
-        LocalDateTime dateTime;
-        return eventRepository.findAllByEventDateTimeAfter(dateTime);
+        return eventRepository.findAllByEventDateTimeAfter(LocalDateTime.now());
     }
 
     @Override
     public List<Event> getEventsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
-        for (Event event : eventRepository.
-        return List.of();
+       return eventRepository.findAllByTicketPriceBetween(minPrice, maxPrice);
     }
 
     @Override
     public List<Event> getEventsByDateRange(LocalDateTime start, LocalDateTime end) {
-        return List.of();
+        return eventRepository.findAllByEventDateTimeBetween(start, end);
     }
 
-    @Override
-    public Event updateEventPrice(UUID id, BigDecimal newPrice) {
-        return null;
-    }
+        @Override
+
+        public Event updateEventPrice(UUID id, BigDecimal newPrice) {
+
+            Event existingEvent = eventRepository.findById(id)
+
+                    .orElseThrow(() -> new RuntimeException("Event not found with id: " + id));
+
+            existingEvent.setTicketPrice(newPrice);
+
+            return eventRepository.save(existingEvent);
+
+        }
 
 }
